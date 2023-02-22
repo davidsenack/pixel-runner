@@ -8,6 +8,21 @@ def display_score():
     score_rect = score_surface.get_rect(center=(400, 50))
     screen.blit(score_surface, score_rect)
 
+def display_intro():
+    # Background and player image
+    screen.fill((94, 129, 162))
+    screen.blit(player_stand, player_stand_rect)
+
+    # Top text
+    top_text_surface = test_font.render('Welcome to Pixel Runner', False, (94, 192, 162)).convert()
+    top_text_rect = top_text_surface.get_rect(center=(400, 50))
+    screen.blit(top_text_surface, top_text_rect)
+
+    # Bottom text
+    bottom_text_surface = test_font.render('Press Space to Start', False, (94, 192, 162)).convert()
+    bottom_text_rect = bottom_text_surface.get_rect(center=(400, 350))
+    screen.blit(bottom_text_surface, bottom_text_rect)
+
 
 pygame.init()
 screen = pygame.display.set_mode((800, 400))
@@ -28,8 +43,12 @@ snail_rect = snail_surface.get_rect(midbottom=(600, 300))
 
 player_surface = pygame.image.load('graphics/player/player_walk_1.png').convert_alpha()
 player_rect = player_surface.get_rect(midbottom=(80, 300))
-
 player_gravity = 0
+
+# Intro screen
+player_stand = pygame.image.load('graphics/player/player_stand.png').convert_alpha()
+player_stand = pygame.transform.rotozoom(player_stand, 0, 2.5)
+player_stand_rect = player_stand.get_rect(center=(400, 200))
 
 
 while True:
@@ -91,7 +110,7 @@ while True:
             game_active = False
     
     else:
-        screen.fill('Yellow')
+        display_intro()
 
     pygame.display.update()
     clock.tick(60)
