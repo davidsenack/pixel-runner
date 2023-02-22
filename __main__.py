@@ -34,15 +34,28 @@ while True:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 exit()
-        
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and player_rect.bottom >= 300:
-                player_gravity = -20
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if player_rect.collidepoint(event.pos) and player_rect.bottom >= 300:
-                player_gravity = -20
+        if game_active:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and player_rect.bottom >= 300:
+                    player_gravity = -20
 
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if player_rect.collidepoint(event.pos) and player_rect.bottom >= 300:
+                    player_gravity = -20
+
+        if not game_active:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    game_active = True
+                    player_rect.midbottom = (80, 300)
+                    snail_rect.midbottom = (600, 300)
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    game_active = True
+                    player_rect.midbottom = (80, 300)
+                    snail_rect.midbottom = (600, 300)
         
     if game_active:
         screen.blit(sky_surface, (0, 0))
