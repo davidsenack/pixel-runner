@@ -5,6 +5,7 @@ from sys import exit
 pygame.init()
 screen = pygame.display.set_mode((800, 400))
 pygame.display.set_caption("Runner")
+clock = pygame.time.Clock()
 
 while True:
     for event in pygame.event.get():
@@ -18,3 +19,4 @@ while True:
     # draw all our elements
     # update everything
     pygame.display.update()
+    clock.tick(60)
