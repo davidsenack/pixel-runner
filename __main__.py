@@ -36,6 +36,8 @@ while True:
     
     screen.blit(sky_surface, (0, 0))
     screen.blit(ground_surface, (0, 300))
+
+    pygame.draw.rect(screen, 'Pink', score_rect)
     screen.blit(score_surface, score_rect)
 
     snail_rect = snail_rect.move(-4, 0)
