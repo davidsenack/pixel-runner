@@ -55,6 +55,7 @@ def obstacle_movement(obstacle_list):
     else:
         return []
 
+
 def collisions(player, obstacles):
     if obstacles:
         for obstacle in obstacles:
