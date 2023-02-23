@@ -7,9 +7,9 @@
 from random import randint, choice
 import sys
 from pygame.constants import (
-    QUIT, KEYDOWN, K_SPACE, K_ESCAPE, USEREVENT, MOUSEBUTTONDOWN
-)
+    QUIT, KEYDOWN, K_SPACE, K_ESCAPE, USEREVENT, MOUSEBUTTONDOWN)
 import pygame
+
 
 class Player(pygame.sprite.Sprite):
     """Player class for the Pixel Runner game."""
