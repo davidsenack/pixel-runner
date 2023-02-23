@@ -7,6 +7,7 @@ def display_score():
     score_surface = test_font.render(f'Score: {current_time}', False, (64, 64, 64)).convert()
     score_rect = score_surface.get_rect(center=(400, 50))
     screen.blit(score_surface, score_rect)
+    return current_time
 
 def display_intro():
     # Background and player image
@@ -14,14 +15,20 @@ def display_intro():
     screen.blit(player_stand, player_stand_rect)
 
     # Top text
-    top_text_surface = test_font.render('Welcome to Pixel Runner', False, (94, 192, 162)).convert()
+    top_text_surface = test_font.render('Pixel Runner', False, (94, 192, 162)).convert()
     top_text_rect = top_text_surface.get_rect(center=(400, 50))
     screen.blit(top_text_surface, top_text_rect)
 
-    # Bottom text
-    bottom_text_surface = test_font.render('Press Space to Start', False, (94, 192, 162)).convert()
-    bottom_text_rect = bottom_text_surface.get_rect(center=(400, 350))
-    screen.blit(bottom_text_surface, bottom_text_rect)
+    if score <= 0:
+        # Bottom text
+        bottom_text_surface = test_font.render('Press Space to Start', False, (94, 192, 162)).convert()
+        bottom_text_rect = bottom_text_surface.get_rect(center=(400, 350))
+        screen.blit(bottom_text_surface, bottom_text_rect)
+    else:
+        # Score bottom text
+        score_text_surface = test_font.render(f'Your Score: {score}', False, (94, 192, 162)).convert()
+        score_text_rect = score_text_surface.get_rect(center=(400, 350))
+        screen.blit(score_text_surface, score_text_rect)
 
 
 pygame.init()
@@ -31,6 +38,7 @@ clock = pygame.time.Clock()
 test_font = pygame.font.Font('font/Pixeltype.ttf', 50)
 game_active = True
 start_time = 0
+score = 0
 
 sky_surface = pygame.image.load('graphics/Sky.png').convert()
 ground_surface = pygame.image.load('graphics/ground.png').convert()
@@ -92,7 +100,7 @@ while True:
 
         #pygame.draw.rect(screen, '#c0e8ec', score_rect)
         #screen.blit(score_surface, score_rect)
-        display_score()
+        score = display_score()
 
         snail_rect = snail_rect.move(-6, 0)
         if snail_rect.x <= -100: snail_rect.x = 800
