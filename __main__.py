@@ -1,10 +1,19 @@
-import __main__
-import pygame
-from sys import exit
+""" Main game file for the Pixel Runner game."""
 from random import randint, choice
+import sys
+from pygame.constants import (
+    QUIT, KEYDOWN, KEYUP, K_SPACE, K_ESCAPE, USEREVENT, MOUSEBUTTONDOWN
+)
+import pygame
+
+# Disble pylint error for pygame unknown members
+# pylint: disable=no-member
+# pylint: disable=no-name-in-module
 
 
 class Player(pygame.sprite.Sprite):
+    """Player class for the Pixel Runner game."""
+
     def __init__(self):
         super().__init__()
 
@@ -28,21 +37,24 @@ class Player(pygame.sprite.Sprite):
         self.jump_sound.set_volume(0.2)
 
     def player_input(self):
-        # Check for space bar press and apply gravity and jump sound
+        """Check for space bar press and apply gravity and jump sound."""
+
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE] and self.rect.bottom >= 300:
+        if keys[K_SPACE] and self.rect.bottom >= 300:
             self.gravity = -20
             self.jump_sound.play()
 
     def apply_gravity(self):
-        # Apply gravity to player when jumping
+        """Apply gravity to player when jumping"""
+
         self.gravity += 1
         self.rect.y += self.gravity
         if self.rect.bottom >= 300:
             self.rect.bottom = 300
 
     def animation_state(self):
-        # Animate player walking; do nothing when jumping
+        """Animate player walking; do nothing when jumping"""
+
         if self.rect.bottom < 300:
             self.image = self.player_jump
         else:
@@ -52,13 +64,16 @@ class Player(pygame.sprite.Sprite):
             self.image = self.player_walk[int(self.player_index)]
 
     def update(self):
-        # Update player image and rect
+        """Update player image and rect"""
+
         self.player_input()
         self.apply_gravity()
         self.animation_state()
 
 
 class Obstacle(pygame.sprite.Sprite):
+    """Obstacle class for the Pixel Runner game."""
+
     def __init__(self, type):
         super().__init__()
 
@@ -82,26 +97,31 @@ class Obstacle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(midbottom=(randint(900, 1100), y_pos))
 
     def animation_state(self):
-        # Animate obstacles
+        """Animate obstacles"""
+
         self.animation_index += 0.1
         if self.animation_index >= len(self.frames):
             self.animation_index = 0
         self.image = self.frames[int(self.animation_index)]
 
     def destroy(self):
-        # Destroy obstacles when off screen
+        """Destroy obstacles when off screen"""
+
         if self.rect.x < -100:
             self.kill()
 
     def update(self):
-        # Update obstacle image and rect
+        """Update obstacle image and rect"""
+
         self.animation_state()
         self.rect.x -= 6
         self.destroy()
 
+
 def display_score():
-    # Display score at top of screen during game
-    current_time = int(pygame.time.get_ticks() / 1000) - start_time
+    """Display score at top of screen during game"""
+
+    current_time = int(pygame.time.get_ticks() / 1000) - START_TIME
     score_surface = test_font.render(
         f'Score: {current_time}', False, (64, 64, 64)).convert()
     score_rect = score_surface.get_rect(center=(400, 50))
@@ -110,8 +130,8 @@ def display_score():
 
 
 def display_intro():
-    # Displays intro screen at beginning of game and a different screen after game over
-    #    
+    """Displays intro screen at beginning of game and a different screen after game over"""
+
     # Player image
     player_stand = pygame.image.load(
         'graphics/player/player_stand.png').convert_alpha()
@@ -128,7 +148,7 @@ def display_intro():
     top_text_rect = top_text_surface.get_rect(center=(400, 50))
     screen.blit(top_text_surface, top_text_rect)
 
-    if score <= 0:
+    if SCORE <= 0:
         # Bottom text
         bottom_text_surface = test_font.render(
             'Press Space to Start', False, (94, 192, 162)).convert()
@@ -139,37 +159,43 @@ def display_intro():
 
         # Score text
         score_text_surface = test_font.render(
-            f'Your Score: {score}', False, (94, 192, 162)).convert()
+            f'Your Score: {SCORE}', False, (94, 192, 162)).convert()
         score_text_rect = score_text_surface.get_rect(center=(400, 320))
         screen.blit(score_text_surface, score_text_rect)
-        
+
         # Play again or quit text
         small_font = pygame.font.Font('font/Pixeltype.ttf', 30)
         play_again_surface = small_font.render(
-            f'Press Space to Play Again or Esc to Quit', False, (94, 192, 162)).convert()
+            'Press Space to Play Again or Esc to Quit', False, (94, 192, 162)).convert()
         play_again_rect = play_again_surface.get_rect(center=(400, 350))
         screen.blit(play_again_surface, play_again_rect)
 
+
 def collision_sprite():
-    # Check for collision between player and obstacles
+    """Check for collision between player and obstacles"""
+
     if pygame.sprite.spritecollide(player.sprite, obstacle_group, False):
         obstacle_group.empty()
         return False
     else:
         return True
 
+
 def display_background():
-    # Display background images
+    """Display background images"""
+
     sky_surface = pygame.image.load('graphics/Sky.png').convert()
     ground_surface = pygame.image.load('graphics/ground.png').convert()
     screen.blit(sky_surface, (0, 0))
     screen.blit(ground_surface, (0, 300))
 
+
 def play_game_music():
-    # Play background music
+    """Play background music"""
     bg_music = pygame.mixer.Sound('audio/music.wav')
     bg_music.play(loops=-1)
     bg_music.set_volume(0.3)
+
 
 # Load game variables
 pygame.init()
@@ -177,10 +203,10 @@ screen = pygame.display.set_mode((800, 400))
 pygame.display.set_caption("Runner")
 clock = pygame.time.Clock()
 test_font = pygame.font.Font('font/Pixeltype.ttf', 50)
-game_active = False
-start_time = 0
-score = 0
- 
+GAME_ACTIVE = False
+START_TIME = 0
+SCORE = 0
+
 # Load game music
 play_game_music()
 
@@ -190,51 +216,51 @@ player.add(Player())
 obstacle_group = pygame.sprite.Group()
 
 # Load game timers
-obstacle_timer = pygame.USEREVENT + 1
+obstacle_timer = USEREVENT + 1
 pygame.time.set_timer(obstacle_timer, 1500)
 
-snail_animation_timer = pygame.USEREVENT + 2
+snail_animation_timer = USEREVENT + 2
 pygame.time.set_timer(snail_animation_timer, 500)
 
-fly_animation_timer = pygame.USEREVENT + 3
+fly_animation_timer = USEREVENT + 3
 pygame.time.set_timer(fly_animation_timer, 200)
 
 # Main game loop
 while True:
     for event in pygame.event.get():
         # Quit game via mouse and keyboard events
-        if event.type == pygame.QUIT:
+        if event.type == QUIT:
             pygame.quit()
-            exit()
+            sys.exit()
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
+        if event.type == KEYDOWN:
+            if event.key == K_ESCAPE:
                 pygame.quit()
-                exit()
+                sys.exit()
         # Create obstacles on game active state
-        if game_active:
+        if GAME_ACTIVE:
             if event.type == obstacle_timer:
                 obstacle_group.add(
                     Obstacle(choice(['fly', 'snail', 'snail'])))
-    
-        # Settings prior to game start or game active state
-        if not game_active:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    game_active = True
-                    start_time = int(pygame.time.get_ticks() / 1000)
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+        # Settings prior to game start or game active state
+        if not GAME_ACTIVE:
+            if event.type == KEYDOWN:
+                if event.key == K_SPACE:
+                    GAME_ACTIVE = True
+                    START_TIME = int(pygame.time.get_ticks() / 1000)
+
+            if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    game_active = True
-                    start_time = int(pygame.time.get_ticks() / 1000)
+                    GAME_ACTIVE = True
+                    START_TIME = int(pygame.time.get_ticks() / 1000)
 
     # Game active state events
-    if game_active:
-        
+    if GAME_ACTIVE:
+
         # Draw background and score
         display_background()
-        score = display_score()
+        SCORE = display_score()
 
         # Draw player and obstacles
         player.draw(screen)
@@ -243,7 +269,7 @@ while True:
         obstacle_group.update()
 
         # Collision
-        game_active = collision_sprite()
+        GAME_ACTIVE = collision_sprite()
 
     else:
         # Draw intro screen
