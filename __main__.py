@@ -1,15 +1,15 @@
 """ Main game file for the Pixel Runner game."""
-from random import randint, choice
-import sys
-from pygame.constants import (
-    QUIT, KEYDOWN, KEYUP, K_SPACE, K_ESCAPE, USEREVENT, MOUSEBUTTONDOWN
-)
-import pygame
 
 # Disble pylint error for pygame unknown members
 # pylint: disable=no-member
 # pylint: disable=no-name-in-module
 
+from random import randint, choice
+import sys
+from pygame.constants import (
+    QUIT, KEYDOWN, K_SPACE, K_ESCAPE, USEREVENT, MOUSEBUTTONDOWN
+)
+import pygame
 
 class Player(pygame.sprite.Sprite):
     """Player class for the Pixel Runner game."""
@@ -74,11 +74,11 @@ class Player(pygame.sprite.Sprite):
 class Obstacle(pygame.sprite.Sprite):
     """Obstacle class for the Pixel Runner game."""
 
-    def __init__(self, type):
+    def __init__(self, sprite_type):
         super().__init__()
 
         # Load obstacle images based on input
-        if type == 'fly':
+        if sprite_type == 'fly':
             fly_1 = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
             fly_2 = pygame.image.load('graphics/fly/fly2.png').convert_alpha()
             self.frames = [fly_1, fly_2]
