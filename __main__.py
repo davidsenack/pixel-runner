@@ -55,6 +55,13 @@ def obstacle_movement(obstacle_list):
     else:
         return []
 
+def collisions(player, obstacles):
+    if obstacles:
+        for obstacle in obstacles:
+            if player.colliderect(obstacle):
+                return False
+    return True
+
 
 pygame.init()
 screen = pygame.display.set_mode((800, 400))
@@ -158,11 +165,13 @@ while True:
         obstacle_rect_list = obstacle_movement(obstacle_rect_list)
 
         # Collision
-        # if snail_rect.colliderect(player_rect):
-        #    game_active = False
+        game_active = collisions(player_rect, obstacle_rect_list)
 
     else:
         display_intro()
+        obstacle_rect_list.clear()
+        player_rect.midbottom = (80, 300)
+        player_gravity = 0
 
     pygame.display.update()
     clock.tick(60)
