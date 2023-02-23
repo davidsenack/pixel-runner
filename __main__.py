@@ -38,12 +38,15 @@ def display_intro():
         screen.blit(score_text_surface, score_text_rect)
 
 
-def obstacle_movement(obstacle_rect_list):
-    if obstacle_rect_list:
-        for obstacle_rect in obstacle_rect_list:
+def obstacle_movement(obstacle_list):
+    if obstacle_list:
+        for obstacle_rect in obstacle_list:
             obstacle_rect.x -= 5
             screen.blit(snail_surface, obstacle_rect)
-        return obstacle_rect_list
+        
+        obstacle_list = [obstacle for obstacle in obstacle_list if obstacle.x > -100]
+        
+        return obstacle_list
     else:
         return []
 
