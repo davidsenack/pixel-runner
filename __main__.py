@@ -118,6 +118,11 @@ def display_intro():
         score_text_rect = score_text_surface.get_rect(center=(400, 350))
         screen.blit(score_text_surface, score_text_rect)
 
+def collision_sprite():
+    if pygame.sprite.spritecollide(player.sprite, obstacle_group, False):
+        obstacle_group.empty()
+        return False
+    else: return True
 
 # def obstacle_movement(obstacle_list):
 #     if obstacle_list:
@@ -247,20 +252,20 @@ while True:
         #         if player_rect.collidepoint(event.pos) and player_rect.bottom >= 300:
         #             player_gravity = -20
 
-        # if not game_active:
-        #     if event.type == pygame.KEYDOWN:
-        #         if event.key == pygame.K_SPACE:
-        #             game_active = True
-        #             player_rect.midbottom = (80, 300)
-        #             # snail_rect.midbottom = (600, 300)
-        #             start_time = int(pygame.time.get_ticks() / 1000)
+        if not game_active:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    game_active = True
+                    #player_rect.midbottom = (80, 300)
+                    # snail_rect.midbottom = (600, 300)
+                    start_time = int(pygame.time.get_ticks() / 1000)
 
-        #     if event.type == pygame.MOUSEBUTTONDOWN:
-        #         if event.button == 1:
-        #             game_active = True
-        #             player_rect.midbottom = (80, 300)
-        #             # snail_rect.midbottom = (600, 300)
-        #             start_time = int(pygame.time.get_ticks() / 1000)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    game_active = True
+                    #player_rect.midbottom = (80, 300)
+                    # snail_rect.midbottom = (600, 300)
+                    start_time = int(pygame.time.get_ticks() / 1000)
         if game_active:
             if event.type == obstacle_timer:
                 obstacle_group.add(
@@ -315,6 +320,7 @@ while True:
         # obstacle_rect_list = obstacle_movement(obstacle_rect_list)
 
         # Collision
+        game_active = collision_sprite()
         # game_active = collisions(player_rect, obstacle_rect_list)
 
     else:
