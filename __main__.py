@@ -64,6 +64,19 @@ def collisions(player, obstacles):
     return True
 
 
+def player_animation():
+    global player_surface, player_index
+    # play walk animation when player is on the ground
+    # play jump animation when player is in the air
+    if player_rect.bottom < 300:
+        player_surface = player_jump
+    else:
+        player_index += 0.1
+        if player_index >= len(player_walk):
+            player_index = 0
+        player_surface = player_walk[int(player_index)]
+
+# Game variables
 pygame.init()
 screen = pygame.display.set_mode((800, 400))
 pygame.display.set_caption("Runner")
@@ -73,6 +86,7 @@ game_active = True
 start_time = 0
 score = 0
 
+# Background
 sky_surface = pygame.image.load('graphics/Sky.png').convert()
 ground_surface = pygame.image.load('graphics/ground.png').convert()
 
@@ -82,11 +96,18 @@ ground_surface = pygame.image.load('graphics/ground.png').convert()
 # Obstacles
 snail_surface = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
 fly_surface = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
-
 obstacle_rect_list = []
 
-player_surface = pygame.image.load(
+# Player
+player_walk_1 = pygame.image.load(
     'graphics/player/player_walk_1.png').convert_alpha()
+player_walk_2 = pygame.image.load(
+    'graphics/player/player_walk_2.png').convert_alpha()
+player_walk = [player_walk_1, player_walk_2]
+player_index = 0
+player_jump = pygame.image.load('graphics/player/jump.png').convert_alpha()
+
+player_surface = player_walk[player_index]
 player_rect = player_surface.get_rect(midbottom=(80, 300))
 player_gravity = 0
 
@@ -160,6 +181,7 @@ while True:
         player_rect.y += player_gravity
         if player_rect.bottom >= 300:
             player_rect.bottom = 300
+        player_animation()
         screen.blit(player_surface, player_rect)
 
         # Obstacle movement
