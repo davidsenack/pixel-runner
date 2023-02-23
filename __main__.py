@@ -42,10 +42,15 @@ def obstacle_movement(obstacle_list):
     if obstacle_list:
         for obstacle_rect in obstacle_list:
             obstacle_rect.x -= 5
-            screen.blit(snail_surface, obstacle_rect)
-        
-        obstacle_list = [obstacle for obstacle in obstacle_list if obstacle.x > -100]
-        
+
+            if obstacle_rect.bottom >= 300:
+                screen.blit(snail_surface, obstacle_rect)
+            else:
+                screen.blit(fly_surface, obstacle_rect)
+
+        obstacle_list = [
+            obstacle for obstacle in obstacle_list if obstacle.x > -100]
+
         return obstacle_list
     else:
         return []
@@ -68,7 +73,7 @@ ground_surface = pygame.image.load('graphics/ground.png').convert()
 
 # Obstacles
 snail_surface = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
-snail_rect = snail_surface.get_rect(midbottom=(600, 300))
+fly_surface = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
 
 obstacle_rect_list = []
 
@@ -112,19 +117,23 @@ while True:
                 if event.key == pygame.K_SPACE:
                     game_active = True
                     player_rect.midbottom = (80, 300)
-                    snail_rect.midbottom = (600, 300)
+                    # snail_rect.midbottom = (600, 300)
                     start_time = int(pygame.time.get_ticks() / 1000)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     game_active = True
                     player_rect.midbottom = (80, 300)
-                    snail_rect.midbottom = (600, 300)
+                    # snail_rect.midbottom = (600, 300)
                     start_time = int(pygame.time.get_ticks() / 1000)
 
         if event.type == obstacle_timer and game_active:
-            obstacle_rect_list.append(snail_surface.get_rect(
-                bottomright=(randint(900, 1100), 300)))
+            if randint(0, 2):
+                obstacle_rect_list.append(snail_surface.get_rect(
+                    bottomright=(randint(900, 1100), 300)))
+            else:
+                obstacle_rect_list.append(fly_surface.get_rect(
+                    bottomright=(randint(900, 1100), 200)))
 
     if game_active:
         screen.blit(sky_surface, (0, 0))
@@ -149,8 +158,8 @@ while True:
         obstacle_rect_list = obstacle_movement(obstacle_rect_list)
 
         # Collision
-        if snail_rect.colliderect(player_rect):
-            game_active = False
+        # if snail_rect.colliderect(player_rect):
+        #    game_active = False
 
     else:
         display_intro()
