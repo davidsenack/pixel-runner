@@ -192,6 +192,7 @@ def display_background():
 
 def play_game_music():
     """Play background music"""
+    
     bg_music = pygame.mixer.Sound('audio/music.wav')
     bg_music.play(loops=-1)
     bg_music.set_volume(0.3)
