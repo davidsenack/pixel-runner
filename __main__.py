@@ -201,7 +201,7 @@ def play_game_music():
 # Load game variables
 pygame.init()
 screen = pygame.display.set_mode((800, 400))
-pygame.display.set_caption("Runner")
+pygame.display.set_caption("Pixel Runner")
 clock = pygame.time.Clock()
 test_font = pygame.font.Font('font/Pixeltype.ttf', 50)
 GAME_ACTIVE = False
