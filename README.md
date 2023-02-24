@@ -11,7 +11,7 @@ In the unlikely event you want to actually run the game, it's very simple.
 ```
 git clone https://github.com/davidsenack/pixel-runner.git
 cd pixel-runner
-python3 __main__.py
+python3 runner.py
 ```
 
 
